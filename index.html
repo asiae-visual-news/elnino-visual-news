@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>역대 최강 엘니뇨가 온다</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css">
+<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+<style>
+:root{--navy:#08111f;--blue:#1c79ad;--hot:#ff503c;--gold:#ffc55c;--paper:#f5f2eb}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--navy);color:#fff;font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo",sans-serif;word-break:keep-all}
+.vn{max-width:100%;overflow:clip}.hero{position:relative;height:100svh;min-height:680px;display:grid;place-items:end start;padding:8vw;background:linear-gradient(90deg,#07111ad9 0%,#07111a55 60%,#07111a22),linear-gradient(0deg,#07111a 0%,transparent 65%),url("https://cphoto.asiae.co.kr/listimglink/1/2025122610094370234_1766711383.jpg") center/cover no-repeat;isolation:isolate}
+.hero:after{content:"";position:absolute;left:0;right:0;bottom:0;height:35%;background:linear-gradient(transparent,#07111a);z-index:-1}.hero-copy{max-width:900px}.label{font-size:14px;letter-spacing:.16em;font-weight:900;color:#9ddcff;margin-bottom:20px}.hero h1{display:inline-block;font-size:clamp(43px,7.4vw,92px);line-height:1.02;letter-spacing:-.06em;margin:0 0 24px}.hero h1 em{display:block;font-size:.69em;line-height:1.14;letter-spacing:-.045em;white-space:nowrap;font-style:normal;color:var(--hot)}.hero p{font-size:clamp(17px,2vw,22px);line-height:1.7;color:#d1dce5;max-width:720px}.scroll-sign{position:absolute;right:5vw;bottom:5vw;font-size:13px;color:#b6c2ca;writing-mode:vertical-rl}
+.scrolly{position:relative}.sticky{position:sticky;top:0;height:100svh;overflow:hidden;background:radial-gradient(circle at 65% 42%,#164968,#07111a 68%)}.map-stage{position:absolute;inset:0}.map-stage:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#06101be8 0%,#06101b55 38%,transparent 70%),linear-gradient(0deg,#06101b55,transparent 25%);z-index:2}.maplibregl-canvas{filter:saturate(.78) contrast(1.08)}.maplibregl-ctrl-bottom-left,.maplibregl-ctrl-bottom-right{display:none}
+.map-fallback{position:absolute;inset:0;background:radial-gradient(ellipse at 72% 48%,#b6382e 0 10%,#174e72 32%,#07111a 67%);opacity:1}.map-loaded .map-fallback{opacity:0}.map-ui{position:absolute;inset:0;pointer-events:none;z-index:3}.map-credit{position:absolute;left:12px;bottom:9px;z-index:4;padding:5px 7px;background:#07111ad9;font-size:10px;line-height:1.45;color:#e1e8ed}.map-credit a{color:#fff}.chapter-label{position:absolute;right:5vw;top:5vw;z-index:6;text-align:right;max-width:44vw;transition:background .35s,padding .35s,opacity .25s}.chapter-label.hide{opacity:0;visibility:hidden}.chapter-label.variables-title{max-width:none}.chapter-label.variables-title strong{font-size:clamp(18px,2.3vw,34px);white-space:nowrap}.chapter-label.photo-mode{padding:11px 14px 12px;background:#07111aeb;border-right:4px solid #ff503c;box-shadow:0 10px 32px #0009}.chapter-label small{display:block;color:#8ccce8;font-weight:900;letter-spacing:.14em}.chapter-label strong{display:block;font-size:clamp(23px,3vw,42px);margin-top:7px;text-shadow:0 3px 16px #000}.temp-hud{position:absolute;right:5vw;top:27%;bottom:auto;text-align:right;opacity:0;transform:translateY(15px);transition:.5s}.temp-hud.show{opacity:1;transform:none}.temp-hud span{font-size:13px;color:#c8d3dc}.temp-hud b{display:block;font-size:clamp(58px,9vw,118px);line-height:.9;color:#ffb052;letter-spacing:-.07em;text-shadow:0 8px 35px #000}.period{display:flex;gap:6px;justify-content:flex-end;margin-top:17px}.period i{font-style:normal;font-size:12px;padding:7px 9px;border:1px solid #ffffff45;color:#cbd4dc;background:#07111a88}.period i.on{background:#ff503c;border-color:#ff503c;color:#fff}.legend{position:absolute;right:5vw;bottom:6%;width:min(330px,42vw);padding:13px 15px;background:#07111ad1;border:1px solid #ffffff25;opacity:0;transition:.5s}.legend.show{opacity:1}.legend-title{font-size:13px;margin-bottom:8px}.gradient{height:10px;border-radius:10px;background:linear-gradient(90deg,#1d79ad,#ffd05d,#ff503c,#8b1231)}.legend-scale{display:flex;justify-content:space-between;font-size:11px;margin-top:6px;color:#ced7dd}.location-tag{position:absolute;right:5vw;top:50%;padding:12px 16px;border-left:4px solid #ff503c;background:#07111ddd;font-weight:800;opacity:0;transition:.5s}.location-tag.show{opacity:1}
+.time-control{width:300px;margin:18px 0 0 auto;pointer-events:auto}.time-control input{width:100%;accent-color:#ff503c;cursor:pointer}.time-control output{display:block;margin-top:5px;font-size:11px;color:#9fabb5}.korea-panel{position:absolute;right:5vw;bottom:8%;width:min(430px,44vw);display:grid;grid-template-columns:1fr 1fr;gap:10px;opacity:0;transform:translateY(16px);transition:.5s}.korea-panel.show{opacity:1;transform:none}.climate-metric{padding:20px;background:#07111adc;border:1px solid #ffffff25}.climate-metric span{font-size:13px;color:#b9c8d2}.climate-metric b{display:block;margin:8px 0 0;font-size:25px;line-height:1.35;color:#fff}.variables{position:absolute;right:6vw;top:20%;width:min(460px,45vw);aspect-ratio:1;border:1px solid #ffffff28;border-radius:50%;opacity:0;transform:scale(.82);transition:.7s}.variables.show{opacity:1;transform:scale(1)}.variables:before{content:"한국 겨울";position:absolute;inset:34%;border-radius:50%;display:grid;place-items:center;text-align:center;background:#ff503c;color:#fff;font-weight:900;box-shadow:0 0 45px #ff503c88}.variable{position:absolute;padding:9px 12px;background:#07111add;border:1px solid #ffffff3b;font-size:13px;font-weight:800}.variable:nth-child(1){left:38%;top:-18px}.variable:nth-child(2){right:-25px;top:44%}.variable:nth-child(3){left:31%;bottom:-18px}.variable:nth-child(4){left:-32px;top:44%}.history-chart{position:absolute;right:5vw;bottom:12%;width:min(530px,48vw);display:grid;grid-template-columns:repeat(4,1fr);gap:10px;opacity:0;transition:.5s}.history-chart.show{opacity:1}.history-bar{min-height:105px;padding:18px 8px;display:grid;place-items:center;text-align:center;background:#07111adc;border:1px solid #ffffff2f;color:#dce5eb}.history-bar i{display:block;width:14px;height:14px;border-radius:50%;margin-bottom:8px;background:#ffb052;box-shadow:0 0 18px #ffb05299}.history-bar:last-child{border-color:#ff705c}.history-bar:last-child i{background:#ff503c;box-shadow:0 0 22px #ff503c}.history-bar b{display:block;font-size:16px}
+.korea-photo{position:absolute;right:5vw;top:20%;width:min(390px,36vw);margin:0;background:#07111aea;border:1px solid #ffffff2f;box-shadow:0 18px 55px #0009;opacity:0;visibility:hidden;transform:translateY(18px);transition:.55s}.korea-photo.show{opacity:1;visibility:visible;transform:none}.korea-photo img{display:block;width:100%;height:min(31vh,260px);object-fit:cover;object-position:center top}.korea-photo figcaption{padding:9px 11px;color:#cbd5dc;font-size:10px;line-height:1.5}.korea-photo figcaption b{color:#fff;font-weight:700}
+.korea-photo{top:24%}
+.panama-photo{position:absolute;right:5vw;top:20%;width:min(410px,37vw);margin:0;background:#07111aea;border:1px solid #ffffff2f;box-shadow:0 18px 55px #0009;opacity:0;visibility:hidden;transform:translateY(18px);transition:.55s}.panama-photo.show{opacity:1;visibility:visible;transform:none}.panama-photo img{display:block;width:100%;height:min(29vh,245px);object-fit:cover;object-position:center}.panama-photo figcaption{padding:9px 11px;color:#cbd5dc;font-size:10px;line-height:1.5}.location-tag.panama-mode{top:auto;bottom:8%}
+.enso-mechanism{position:absolute;right:5vw;top:22%;width:min(520px,45vw);padding:18px 18px 16px;background:#07111ae8;border:1px solid #ffffff2d;box-shadow:0 18px 55px #0008;opacity:0;transform:translateY(18px);transition:.55s}.enso-mechanism.show{opacity:1;transform:none}.enso-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}.enso-head b{font-size:21px}.enso-head span{font-size:11px;color:#b9c9d4}.enso-sky{position:relative;height:88px;border-radius:4px 4px 0 0;background:linear-gradient(#74b9dc,#d8edf4);overflow:hidden}.enso-coast{position:absolute;bottom:0;width:18%;height:44%;background:#637e57}.enso-coast.west{left:0;clip-path:polygon(0 28%,45% 0,100% 100%,0 100%)}.enso-coast.east{right:0;clip-path:polygon(55% 0,100% 25%,100% 100%,0 100%)}.enso-cloud{position:absolute;top:17px;left:16%;width:72px;height:21px;border-radius:30px;background:#eef5f7;box-shadow:18px -11px 0 -2px #eef5f7,38px 0 0 1px #dbe7ea;transition:left .7s}.enso-cloud:after{content:"비구름";position:absolute;top:27px;left:8px;width:70px;color:#163147;font-size:11px;font-weight:900}.enso-wind{position:absolute;left:27%;top:14px;color:#075f94;font-size:31px;font-weight:900;letter-spacing:5px;white-space:nowrap;transition:opacity .5s,transform .5s}.enso-ocean{position:relative;height:98px;overflow:hidden;background:linear-gradient(#1886bb,#074873)}.enso-ocean:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:#bcecff99}.warm-pool{position:absolute;left:3%;top:4px;width:56%;height:67px;border-radius:0 50% 65% 0;background:radial-gradient(ellipse at 45% 20%,#ffd75e,#ff6a36 53%,#d52c2c 75%,transparent 77%);filter:drop-shadow(0 0 12px #ff6b36aa);transition:left .7s,width .7s}.upwelling{position:absolute;right:10%;bottom:4px;color:#c8f3ff;text-align:center;font-size:11px;font-weight:900}.upwelling i{display:block;font-style:normal;font-size:30px;line-height:.8}.enso-places{display:flex;justify-content:space-between;margin-top:6px;color:#9fb0bd;font-size:11px}.enso-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:11px}.enso-facts span{padding:8px 6px;background:#ffffff0b;border-top:2px solid #2e8fc0;text-align:center;color:#d4dee5;font-size:11px;line-height:1.4}.enso-mechanism.elnino-state{border-color:#ff765d88}.enso-mechanism.elnino-state .enso-cloud{left:58%}.enso-mechanism.elnino-state .enso-wind{opacity:.38;transform:scaleX(.72)}.enso-mechanism.elnino-state .warm-pool{left:24%;width:69%}.enso-mechanism.elnino-state .upwelling{opacity:.5}.enso-mechanism.elnino-state .enso-facts span{border-color:#ff654d}.enso-mechanism.lanina-state{border-color:#79c9ef88}.enso-mechanism.lanina-state .enso-cloud{left:8%}.enso-mechanism.lanina-state .enso-wind{transform:scaleX(1.17);transform-origin:left}.enso-mechanism.lanina-state .warm-pool{left:-5%;width:49%}.enso-mechanism.lanina-state .upwelling{color:#e4fbff}.enso-mechanism.lanina-state .enso-facts span{border-color:#55b8e8}
+.steps{position:relative;z-index:5;width:min(520px,88vw);margin-left:max(6vw,calc((100vw - 1280px)/2));padding:35vh 0 45vh;pointer-events:none}.step{min-height:76vh;display:flex;align-items:center}.card{background:#07111add;border:1px solid #ffffff28;border-radius:6px;padding:28px 28px 30px;box-shadow:0 18px 60px #0008;backdrop-filter:blur(12px)}.card .num{display:inline-block;color:var(--gold);font-size:13px;font-weight:900;letter-spacing:.14em;margin-bottom:12px}.card h2{font-size:clamp(28px,3vw,42px);line-height:1.25;letter-spacing:-.045em;margin:0 0 14px}.card p{font-size:17px;line-height:1.75;color:#d6dce2;margin:0}.card strong{color:#fff}
+.term{position:relative;display:inline-block;color:#fff;font-weight:800;border-bottom:1px dotted #8ed8f7;pointer-events:auto;cursor:pointer;outline:none}.term-mark{display:inline-grid;place-items:center;width:17px;height:17px;margin-left:3px;border:1px solid #8ed8f7;border-radius:50%;font-size:10px;line-height:1;color:#8ed8f7;vertical-align:2px;transition:transform .2s}.term-tip{position:absolute;left:0;bottom:calc(100% + 10px);z-index:20;width:min(290px,72vw);padding:11px 13px;border:1px solid #8ed8f766;border-radius:5px;background:#07111af5;box-shadow:0 10px 30px #000b;color:#e7eef2;font-size:13px;font-weight:500;line-height:1.55;word-break:keep-all;opacity:0;visibility:hidden;transform:translateY(5px);transition:.2s}.term-tip:after{content:"";position:absolute;left:18px;top:100%;border:6px solid transparent;border-top-color:#07111af5}.term.open .term-tip{opacity:1;visibility:visible;transform:none}.term.open .term-mark{transform:rotate(180deg)}.term:focus-visible{outline:2px solid #8ed8f7;outline-offset:3px;border-radius:2px}
+.earth{background:radial-gradient(circle at 70% 50%,#164e69 0 22%,#0b2435 45%,#07111a 71%)}.globe{position:absolute;width:min(68vw,800px);aspect-ratio:1;right:-6vw;top:50%;transform:translateY(-50%);border-radius:50%;background:radial-gradient(circle at 35% 28%,#7ac3d9,#1c7192 32%,#104661 66%,#06131d 72%);box-shadow:inset -70px -25px 100px #020812aa,0 0 80px #2597c52c;overflow:hidden}.land{position:absolute;background:#d8d6a8;opacity:.8;filter:drop-shadow(0 5px 8px #0004)}.asia{width:54%;height:48%;top:18%;right:5%;clip-path:polygon(8% 17%,39% 0,74% 12%,100% 33%,82% 51%,88% 75%,58% 68%,43% 100%,29% 69%,0 57%)}.americas{width:25%;height:63%;left:5%;top:8%;clip-path:polygon(30% 0,90% 18%,66% 39%,82% 53%,49% 100%,30% 77%,42% 53%,0 30%)}.belt{position:absolute;left:2%;right:2%;top:47%;height:10%;border:2px solid #ffb37caa;border-radius:50%;background:#ff533a99;box-shadow:0 0 34px #ff452b;animation:heat 2.4s ease-in-out infinite}.korea{position:absolute;right:20%;top:39%;width:15px;height:15px;border-radius:50%;background:#fff;box-shadow:0 0 0 12px #fff3,0 0 30px #fff}
+.heat-view{background:linear-gradient(135deg,#112b42,#2c0d15)}.ocean{position:absolute;inset:0;background:radial-gradient(ellipse at 72% 52%,#ff392e 0 12%,#e96932 25%,#176f9b 56%,#092038 76%);transition:filter .6s}.grid{position:absolute;inset:0;background-image:linear-gradient(#fff1 1px,transparent 1px),linear-gradient(90deg,#fff1 1px,transparent 1px);background-size:6vw 6vw;mask-image:linear-gradient(90deg,transparent,#000)}.thermo{position:absolute;right:8vw;top:16%;font-size:clamp(70px,14vw,180px);font-weight:950;letter-spacing:-.08em;color:#fff;text-shadow:0 6px 40px #70151c}.thermo small{font-size:.28em;letter-spacing:0}.scale{position:absolute;right:9vw;bottom:14%;display:flex;gap:9px}.scale i{width:38px;height:8px;background:#fff3}.scale i.on{background:var(--hot);box-shadow:0 0 18px var(--hot)}
+.numbers{background:linear-gradient(145deg,#0a1422,#182840)}.stat-wrap{position:absolute;right:7vw;top:50%;transform:translateY(-50%);width:min(54vw,690px)}.stat{border-top:1px solid #ffffff30;padding:23px 0;display:flex;justify-content:space-between;align-items:baseline;opacity:.22;transition:.5s}.stat.on{opacity:1;transform:translateX(-15px)}.stat span{font-size:15px;color:#b9c5cf}.stat b{font-size:clamp(38px,6vw,72px);letter-spacing:-.05em;color:var(--gold)}
+.winter{background:#172536}.compare{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr}.winter-side{position:relative;display:grid;place-items:center;overflow:hidden}.normal{background:linear-gradient(#6c8395,#c4d6df)}.elnino{background:linear-gradient(#677582,#5b7480)}.winter-side:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent,#07111abb)}.weather-icon{font-size:clamp(90px,15vw,190px);filter:drop-shadow(0 20px 25px #0005);z-index:1}.side-label{position:absolute;bottom:10%;z-index:2;text-align:center}.side-label b{display:block;font-size:clamp(25px,3vw,42px)}.side-label span{color:#d9e2e8}.rain-lines{position:absolute;inset:0;background:repeating-linear-gradient(104deg,transparent 0 31px,#d3eeff70 32px,#d3eeff70 35px,transparent 36px 60px);animation:rain 1s linear infinite}
+.world{background:radial-gradient(circle at 66% 48%,#243e4e,#09131e 65%)}.world svg{position:absolute;right:1vw;top:50%;transform:translateY(-50%);width:min(68vw,920px);height:auto;opacity:.85}.route{stroke-dasharray:10 8;animation:dash 1.3s linear infinite}.impact{animation:pulse 1.7s infinite;transform-origin:center}
+.ending{min-height:100svh;padding:10vw;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 50% 20%,#394e5f,#07111a 67%)}.ending blockquote{margin:0;max-width:920px;font-size:clamp(38px,6vw,78px);line-height:1.16;letter-spacing:-.055em;font-weight:900}.ending blockquote span{color:#9ddcff}.ending p{color:#aebac4;margin-top:30px;line-height:1.7}.source{font-size:12px!important;color:#75828d!important}
+.article-detail{display:none}.photo-break{position:relative;min-height:88svh;display:grid;place-items:end start;padding:8vw;background-position:center;background-size:cover;isolation:isolate}.photo-break:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#07111add,#07111a22 70%),linear-gradient(0deg,#07111acc,transparent 70%);z-index:-1}.photo-break.ocean-photo{background-image:url("https://cphoto.asiae.co.kr/listimglink/1/2026090317290915278_1788424149.jpg")}.photo-copy{max-width:760px}.photo-copy small{font-weight:900;letter-spacing:.14em;color:#8ed8f7}.photo-copy h2{font-size:clamp(38px,6vw,76px);line-height:1.1;letter-spacing:-.055em;margin:15px 0}.photo-copy p{font-size:17px;line-height:1.7;color:#d6e0e7}.photo-credit,.hero-credit{position:absolute;right:3vw;bottom:2.5vw;font-size:11px;color:#d1d8dd}.hero-credit{bottom:2vw;z-index:2}
+.full-article{background:#fff;color:#161c23;padding:115px 7vw}.article-inner{width:min(820px,100%);margin:auto}.article-head{border-bottom:1px solid #d9dde1;padding-bottom:34px;margin-bottom:45px}.article-head .tag{font-size:13px;font-weight:900;color:#d93636;letter-spacing:.12em}.article-head h2{font-size:clamp(36px,5.3vw,62px);line-height:1.17;letter-spacing:-.055em;margin:12px 0 18px}.article-head .summary{font-size:20px;line-height:1.65;color:#515b65;margin:0}.article-copy p{font-family:"Noto Serif KR",Georgia,serif;font-size:19px;line-height:2.02;letter-spacing:-.018em;margin:0 0 34px}.article-copy p.lead{font-size:23px;font-weight:700;line-height:1.75}.article-copy mark{background:linear-gradient(transparent 58%,#ffd1c9 58%);color:inherit}.article-copy .quote{font-family:Pretendard,"Noto Sans KR",sans-serif;font-size:24px;line-height:1.65;font-weight:800;border-left:7px solid var(--hot);padding:8px 0 8px 25px;margin:50px 0;color:#28323c}.inline-data{margin:50px 0;background:#0b1725;color:#fff;padding:35px}.inline-data small{color:#8fd7ff;font-weight:900;letter-spacing:.1em}.inline-data strong{display:block;font-size:clamp(44px,8vw,82px);color:var(--gold);margin:9px 0}.inline-data p{font-family:Pretendard,"Noto Sans KR",sans-serif;font-size:16px;color:#cbd4dc;margin:0}.article-credit{font-size:13px;color:#7a838c;border-top:1px solid #ddd;padding-top:24px;margin-top:55px}
+@keyframes rain{to{background-position:-65px 120px}}@keyframes heat{50%{filter:saturate(1.5);transform:scaleY(1.16)}}@keyframes dash{to{stroke-dashoffset:-36}}@keyframes pulse{50%{opacity:.35;transform:scale(1.7)}}@keyframes metric{from{width:0}}@keyframes barUp{from{transform:scaleY(0)}}
+@media(max-width:760px){.hero{padding:8vw 7vw 16vh}.hero h1{font-size:clamp(32px,9.5vw,44px)}.steps{margin:auto;padding-top:62vh}.step{min-height:88vh;align-items:flex-end;padding-bottom:8vh}.card{padding:22px}.chapter-label{right:5vw;top:4vw;max-width:80vw}.temp-hud{top:16%;right:5vw}.temp-hud b{font-size:58px}.period{max-width:250px;flex-wrap:wrap}.time-control{width:250px}.legend{right:5vw;bottom:43%;width:62vw}.korea-panel{right:5vw;bottom:44%;width:76vw}.korea-photo,.panama-photo{right:5vw;top:14%;width:76vw}.korea-photo img,.panama-photo img{height:20vh;min-height:120px}.korea-photo figcaption,.panama-photo figcaption{font-size:9px;padding:6px 8px}.location-tag.panama-mode{bottom:43%}.variables{right:-2vw;top:13%;width:72vw}.history-chart{right:5vw;bottom:43%;width:75vw;height:35%}.enso-mechanism{right:5vw;top:15%;width:90vw;padding:12px}.enso-head{margin-bottom:8px}.enso-head b{font-size:17px}.enso-sky{height:68px}.enso-ocean{height:72px}.enso-wind{font-size:24px;top:9px}.enso-cloud{transform:scale(.78);transform-origin:left top}.warm-pool{height:51px}.upwelling i{font-size:23px}.enso-facts{display:none}.article-detail,.full-article{padding:80px 6vw}.article-copy p{font-size:17px;line-height:1.95}.article-copy p.lead{font-size:20px}.article-copy .quote{font-size:21px}.photo-break{min-height:74svh;padding:10vw 7vw}.photo-credit{right:5vw;bottom:4vw}}
+@media(max-width:760px){.sticky{height:100svh}.steps{width:auto;margin:0;padding:68svh 16px 38svh}.step{min-height:100svh;padding:0 0 6svh;align-items:flex-end}.card{width:100%;max-width:520px;margin-left:auto;margin-right:auto;padding:18px 19px 20px;border-radius:8px;background:#07111af2;box-shadow:0 12px 35px #0009}.card .num{font-size:11px;margin-bottom:9px}.card h2{font-size:clamp(24px,7vw,30px);line-height:1.22;margin-bottom:10px}.card p{font-size:15px;line-height:1.68}.chapter-label{right:4vw;top:3vw;max-width:min(66vw,360px)}.chapter-label strong{font-size:20px;line-height:1.2}.chapter-label small{font-size:9px}.chapter-label.photo-mode{padding:7px 9px 8px}.temp-hud{right:4vw;top:12%;transform:scale(.82);transform-origin:right top}.temp-hud.show{transform:scale(.82)}.period{margin-top:10px;max-width:210px}.period i{font-size:10px;padding:5px 6px}.time-control{width:205px;margin-top:9px}.legend{right:4vw;top:29%;bottom:auto;width:min(54vw,300px);padding:9px 10px}.legend-title,.legend-scale{font-size:9px}.location-tag{right:4vw;top:38%;max-width:min(68vw,360px);padding:8px 10px;font-size:11px}.location-tag.panama-mode{top:38%;bottom:auto}.korea-panel{right:4vw;top:16%;bottom:auto;width:min(64vw,350px);gap:5px}.climate-metric{padding:10px}.climate-metric span{font-size:10px}.climate-metric b{font-size:17px;margin-top:4px}.korea-photo,.panama-photo{right:4vw;top:13%;width:min(64vw,340px)}.korea-photo img,.panama-photo img{height:16svh;min-height:96px}.korea-photo figcaption,.panama-photo figcaption{font-size:8px;line-height:1.35;padding:5px 7px}.variables{right:3vw;top:13%;width:min(58vw,330px)}.variable{padding:5px 7px;font-size:9px}.history-chart{right:4vw;top:16%;bottom:auto;width:min(65vw,390px);height:auto;gap:4px}.history-bar{min-height:72px;padding:10px 4px}.history-bar b{font-size:11px}.history-chart:after{top:-19px;font-size:8px}.enso-mechanism{right:4vw;top:11%;width:min(55vw,330px);padding:8px}.enso-head{margin-bottom:5px}.enso-head b{font-size:14px}.enso-head span{display:none}.enso-sky{height:48px}.enso-ocean{height:52px}.enso-wind{font-size:17px;top:5px}.enso-cloud{transform:scale(.55);transform-origin:left top;top:10px}.warm-pool{height:38px}.upwelling{font-size:8px}.upwelling i{font-size:17px}.enso-places{font-size:8px;margin-top:4px}.term-tip{width:min(245px,76vw);font-size:11px}.map-credit{left:4px;bottom:3px;max-width:88%;padding:3px 4px;font-size:7px;opacity:.78}.globe{width:90vw;max-width:none;right:-24vw}.world svg{width:94vw;max-width:none;right:-18vw}.stat-wrap{right:4vw;width:min(68vw,390px)}.stat{padding:13px 0}.stat span{font-size:11px}.stat b{font-size:32px}.thermo{right:5vw;top:13%;font-size:64px}.scale{right:5vw;bottom:42%;gap:5px}.scale i{width:25px}.weather-icon{font-size:78px}.side-label{bottom:42%}.side-label b{font-size:20px}.side-label span{font-size:11px}}
+@media(min-width:761px){.steps{width:min(460px,38vw);margin-left:4vw}.card{padding:24px 31px 26px 24px;background:linear-gradient(135deg,rgba(7,17,29,.97) 0%,rgba(7,17,29,.94) 66%,rgba(7,17,29,.72) 86%,rgba(7,17,29,.38) 100%);border-color:#ffffff20;box-shadow:0 16px 48px #0006;backdrop-filter:blur(9px)}.card h2{font-size:clamp(27px,2.6vw,38px)}.card p{font-size:16px}.chapter-label{max-width:34vw}.enso-mechanism{width:min(470px,38vw);right:4vw}.korea-panel{width:min(400px,35vw);right:4vw}.korea-photo,.panama-photo{width:min(370px,33vw);right:4vw}.variables{width:min(420px,36vw);right:4vw}.history-chart{width:min(480px,40vw);right:4vw}.legend{width:min(300px,30vw);right:4vw}.stat-wrap{width:min(580px,47vw);right:4vw}}
+@media(max-width:760px){.korea-photo{top:19%}}
+@supports(height:100dvh){.hero,.sticky{height:100dvh}}
+@media(max-width:760px){.hero{height:100dvh;min-height:560px;padding:calc(env(safe-area-inset-top) + 24px) 24px 14dvh}.hero-copy{max-width:100%}.hero h1{font-size:clamp(30px,9vw,40px)}.hero h1 em{white-space:normal}.hero-credit{left:20px;right:20px;bottom:14px;font-size:8px;text-align:right}.scroll-sign{right:14px;bottom:12dvh}.steps{padding:58dvh 14px 32dvh}.step{min-height:100dvh;padding-bottom:5dvh}.card{max-width:min(520px,calc(100vw - 28px));max-height:46dvh;overflow:auto;padding:17px 18px 19px}.card h2{font-size:clamp(23px,6.7vw,29px)}.card p{font-size:14px;line-height:1.6}.chapter-label{top:calc(env(safe-area-inset-top) + 10px);right:14px;max-width:68vw}.chapter-label strong{font-size:18px}.enso-mechanism{top:8dvh;right:14px;width:min(58vw,330px);max-height:30dvh;overflow:hidden}.enso-sky{height:44px}.enso-ocean{height:48px}.korea-photo{top:18dvh;right:14px;width:min(62vw,330px)}.panama-photo{top:12dvh;right:14px;width:min(62vw,330px)}.korea-photo img,.panama-photo img{height:14dvh;min-height:88px}.korea-panel{top:36dvh;bottom:auto;right:14px;width:min(62vw,340px)}.variables{top:13dvh;right:18px;width:min(55vw,310px)}.history-chart{top:15dvh;right:14px;width:min(62vw,360px)}.legend{top:28dvh;right:14px;width:min(54vw,280px)}.location-tag{top:36dvh;right:14px}.temp-hud{top:11dvh;right:14px}.map-credit{bottom:2px}}
+@media(min-width:761px){.steps{width:min(430px,34vw);margin-left:4vw}.card{max-width:430px}.enso-mechanism{width:min(420px,34vw);right:4vw;top:19%}.korea-photo,.panama-photo{width:min(350px,30vw);right:4vw}.korea-panel{width:min(370px,31vw);right:4vw}.variables{width:min(390px,32vw);right:4vw}.history-chart{width:min(450px,36vw);right:4vw}.chapter-label{max-width:31vw}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.history-chart:after{content:"과거 강한 엘니뇨 사례 · 2026년은 전망";position:absolute;right:0;top:-26px;font-size:11px;color:#b8c5ce}
+.photo-break,.article-detail,.full-article,.ending{display:none!important}
+</style>
+</head>
+<body>
+<main class="vn">
+  <header class="hero">
+    <div class="hero-copy">
+      <div class="label">CLIMATE · VISUAL NEWS</div>
+      <h1>올해는 패딩 덜 꺼내나<br><em>비 자주 오고 따뜻한 한국 겨울?</em></h1>
+    </div>
+    <div class="scroll-sign">SCROLL TO EXPLORE ↓</div>
+    <div class="hero-credit">서울 종로구 광화문광장을 지나는 시민들 · 2025.12.26 윤동주 기자 / 아시아경제</div>
+  </header>
+
+  <section class="scrolly" id="story">
+    <div class="sticky">
+      <div class="map-stage" id="map"><div class="map-fallback"></div></div>
+      <div class="map-credit">온도 색상은 기사 수치를 바탕으로 한 개념 시각화이며 실제 관측 격자 자료가 아닙니다.<br><a href="https://openfreemap.org/" target="_blank" rel="noopener">OpenFreeMap</a> · <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">© OpenMapTiles</a> · Data from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></div>
+      <div class="map-ui">
+        <div class="chapter-label"><small id="mapKicker">PACIFIC OCEAN</small><strong id="mapTitle">엘니뇨의 시작점</strong></div>
+        <div class="temp-hud" id="tempHud"><span>평년 대비 해수면 온도</span><b id="temp">+1.5℃</b><div class="period"><i>5~7월</i><i>7월</i><i>최근</i><i>11월 전망</i></div><label class="time-control"><input id="timeSlider" type="range" min="0" max="3" step="1" value="0" aria-label="해수면 온도 시점 선택"><output id="timeOutput">5~7월 관측</output></label></div>
+        <div class="legend" id="legend"><div class="legend-title">해수면 온도 편차</div><div class="gradient"></div><div class="legend-scale"><span>평년</span><span>+1.5℃</span><span>+2.6℃</span><span>+3.9℃</span></div></div>
+        <div class="location-tag" id="locationTag">대한민국 · 따뜻하고 비 많은 겨울 가능성</div>
+        <figure class="korea-photo" id="koreaPhoto"><img src="https://cphoto.asiae.co.kr/listimglink/1/2019123014312571166_1577683885.jpg" alt="겨울비가 내리는 서울 도심에서 시민들이 우산을 쓰고 걷는 모습"><figcaption><b>겨울비가 내리는 날</b>, 서울 종로구 정부서울청사 인근에서 시민들이 우산을 쓴 채 발걸음을 재촉하고 있다. / 김현민 기자 kimhyun81@</figcaption></figure>
+        <figure class="panama-photo" id="panamaPhoto"><img src="https://cphoto.asiae.co.kr/listimglink/1/2026090109013110103_1788220891.jpg" alt="수위가 낮아진 파나마 운하의 수문을 선박이 통과하는 모습"><figcaption>지난달 27일(현지시간) 엘니뇨와 관련된 강수 부족으로 수위가 낮아진 파나마 운하에서 한 선박이 파나마 수문을 통과하고 있다. / 로이터연합뉴스</figcaption></figure>
+        <div class="enso-mechanism" id="ensoMechanism" aria-hidden="true"><div class="enso-head"><b id="ensoName">평상시의 적도 태평양</b><span>서쪽 ← 태평양 → 동쪽</span></div><div class="enso-sky"><i class="enso-coast west"></i><i class="enso-coast east"></i><div class="enso-cloud"></div><div class="enso-wind">← ← ←</div></div><div class="enso-ocean"><div class="warm-pool"></div><div class="upwelling"><i>↑</i><span id="upwellingText">찬 바닷물 용승</span></div></div><div class="enso-places"><span>인도네시아·호주</span><span>페루·남아메리카</span></div><div class="enso-facts" id="ensoFacts"><span>강한 무역풍</span><span>따뜻한 물은 서쪽</span><span>동쪽 용승 활발</span></div></div>
+        <div class="korea-panel" id="koreaPanel"><div class="climate-metric"><span>겨울철 기온</span><b>평년보다 높은 경향</b></div><div class="climate-metric"><span>겨울철 강수량</span><b>평년보다 많은 경향</b></div></div>
+        <div class="variables" id="variables"><span class="variable">인도양 수온</span><span class="variable">서태평양 수온</span><span class="variable">북극 해빙</span><span class="variable">대기 흐름</span></div>
+        <div class="history-chart" id="historyChart"><div class="history-bar"><i></i><b>1997</b></div><div class="history-bar"><i></i><b>2015</b></div><div class="history-bar"><i></i><b>2023</b></div><div class="history-bar"><i></i><b>2026 전망</b></div></div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <article class="step" data-scene="world"><div class="card"><span class="num">01 · 지금 무슨 일이</span><h2>연말에도<br>매우 강한 엘니뇨</h2><p>세계기상기구(WMO)는 엘니뇨가 올해 말 매우 강한 수준으로 정점에 이른 뒤 최소 내년 초까지 이어질 것으로 전망했습니다. WMO는 매우 강한 엘니뇨가 세계 곳곳의 기온과 강수 양상에 두드러진 변동을 일으킬 가능성을 키울 것으로 봤습니다. 한국에도 영향을 미쳐 올겨울 기온이 높고 강수량이 많아질 가능성이 제기됩니다.</p></div></article>
+      <article class="step" data-scene="normal"><div class="card"><span class="num">02 · 원래 평상시에는</span><h2>무역풍이 따뜻한 물을<br>서쪽으로 밀어낸다</h2><p>적도 태평양의 <span class="term" tabindex="0" role="button" aria-expanded="false">무역풍<span class="term-mark">▾</span><span class="term-tip" role="tooltip">적도 부근에서 동쪽에서 서쪽으로 일정하게 부는 바람입니다.</span></span>은 동쪽에서 서쪽으로 붑니다. 따뜻한 바닷물은 인도네시아·호주 쪽에 쌓이고, 남아메리카 연안에서는 깊은 곳의 찬 바닷물이 솟아오릅니다. 비구름도 따뜻한 서태평양에 집중됩니다.</p></div></article>
+      <article class="step" data-scene="elnino-mechanism"><div class="card"><span class="num">03 · 엘니뇨가 오면</span><h2>따뜻한 바다가<br>동쪽으로 이동한다</h2><p>무역풍이 약해지면서 서쪽에 모였던 따뜻한 바닷물이 중·동태평양으로 이동합니다. 페루 연안의 찬 바닷물 <span class="term" tabindex="0" role="button" aria-expanded="false">용승<span class="term-mark">▾</span><span class="term-tip" role="tooltip">깊은 바다의 차가운 물이 바다 표면으로 솟아오르는 현상입니다.</span></span>은 약해지고, 비구름과 강수 지역도 중·동태평양 쪽으로 옮겨갑니다.</p></div></article>
+      <article class="step" data-scene="lanina"><div class="card"><span class="num">04 · 라니냐는 반대</span><h2>더 강한 무역풍,<br>더 차가워지는 동태평양</h2><p>무역풍이 평소보다 강해져 따뜻한 물을 서쪽으로 더 밀어냅니다. 남아메리카 연안에서는 찬 바닷물이 더 활발하게 솟아오르고 중·동태평양 수온은 평년보다 낮아집니다. 엘니뇨 때 따뜻해지는 바다가 라니냐 때는 반대로 차가워지는 것입니다.</p></div></article>
+      <article class="step" data-scene="monitor"><div class="card"><span class="num">05 · 엘니뇨 감시구역을 보면</span><h2>적도 태평양의<br>좁고 긴 감시구역</h2><p>이번 전망은 이 가운데 엘니뇨가 매우 강해지는 경우입니다. <span class="term" tabindex="0" role="button" aria-expanded="false">엘니뇨 감시구역<span class="term-mark">▾</span><span class="term-tip" role="tooltip">엘니뇨와 라니냐를 판단하기 위해 해수면 온도를 지속적으로 관측하는 적도 태평양 구역입니다.</span></span>은 북위 5도~남위 5도, 서경 170도~120도 사이입니다. 이곳의 3개월 이동평균 수온이 평년보다 0.5℃ 이상 높은 상태로 5개월 넘게 이어지면 엘니뇨로 봅니다.</p></div></article>
+      <article class="step" data-scene="probability"><div class="card"><span class="num">06 · 얼마나 이어지나</span><h2>9월부터 내년 2월까지<br>유지 확률 <strong>100%</strong></h2><p>지난 3일 WMO가 발표한 엘니뇨·라니냐 전망에 따르면, 9~11월 엘니뇨 상태가 유지될 확률은 100%로 제시됐습니다. 12월부터 내년 2월까지 이어질 확률도 100%로 전망됐습니다. WMO는 이 기간 평년 수준으로 돌아가거나 라니냐로 전환할 가능성은 없다고 봤습니다.</p></div></article>
+      <article class="step" data-scene="heat" data-level="0"><div class="card"><span class="num">07 · 이미 기준을 넘었다</span><h2>5~7월 평균<br><strong>+1.5℃</strong></h2><p>엘니뇨 판단 기준인 +0.5℃를 크게 웃돌았습니다. 강한 엘니뇨로 발달하는 흐름이 이미 관측되기 시작한 것입니다.</p></div></article>
+      <article class="step" data-scene="heat" data-level="1"><div class="card"><span class="num">08 · 더 빠르게 뜨거워졌다</span><h2>7월에는<br><strong>+2.0℃</strong></h2><p>7월29일부터 8월19일 사이에는 평년보다 2.2~2.6℃ 높은 수준까지 올라갔습니다.</p></div></article>
+      <article class="step" data-scene="heat" data-level="2"><div class="card"><span class="num">09 · 최근 관측</span><h2>한국 기상청 발표<br><strong>+2.6℃</strong></h2><p>통상 +2.0℃ 이상이면 공식 용어는 아니지만 ‘슈퍼 엘니뇨’로 불립니다. 이번 현상이 그 기준을 크게 웃도는 이유입니다.</p></div></article>
+      <article class="step" data-scene="forecast" data-level="3"><div class="card"><span class="num">10 · 전망을 보면</span><h2>14개 모델은 11월<br><strong>+3.9℃</strong> 전망</h2><p>기후 전문매체 ‘더 클라이밋 브링크’가 14개 기후예측모델을 종합한 결과, 오는 11월 감시구역의 해수면 온도는 평년보다 3.9℃까지 높아질 것으로 예상됐습니다. 이는 관측 확정값이 아닌 모델 전망입니다. 한국 기상청 엘니뇨·라니냐 예측 모델도 가을철 감시구역 해수면 온도가 평년보다 3.0℃ 이상 높을 것으로 내다봤습니다.</p></div></article>
+      <article class="step" data-scene="korea"><div class="card"><span class="num">11 · 그래서 한국은</span><h2>따뜻하고<br>비 많은 겨울 가능성</h2><p>한국은 엘니뇨가 가장 강해지는 겨울철에 기온이 평년보다 높고 강수량이 많아지는 경향을 보입니다. 다만 정확한 확률 수치가 제시된 것은 아닙니다.</p></div></article>
+      <article class="step" data-scene="variables"><div class="card"><span class="num">12 · 단정할 수는 없다</span><h2>한국 겨울을 결정하는<br>변수는 하나가 아니다</h2><p>인도양과 서태평양의 해수면 온도, 북극 해빙, 대기 흐름 등 여러 요인이 함께 작용합니다.</p></div></article>
+      <article class="step" data-scene="history"><div class="card"><span class="num">13 · 과거 엘니뇨가 강했던 때와 비교</span><h2>1997·2015·2023년을<br>넘어설 가능성</h2><p>전문가들은 이번 현상이 과거의 강력한 엘니뇨를 넘어 역대 가장 강한 수준으로 발달할 가능성도 보고 있습니다. 네 연도는 강한 사례를 보여주는 것이며 막대 높이 비교가 아닙니다.</p></div></article>
+      <article class="step" data-scene="panama"><div class="card"><span class="num">14 · 영향은 이미 현실로</span><h2>가뭄이 파나마운하의<br>운영까지 흔들었다</h2><p>파나마에서는 가뭄 장기화로 운하 운영에 차질이 생기고 국가비상사태가 선포됐습니다. 강한 엘니뇨는 지구 온난화와 이상기후 우려를 키웁니다. WMO는 2030년까지 5년 사이 최고기온 기록이 깨질 가능성을 86%로 전망했습니다.</p></div></article>
+    </div>
+  </section>
+
+  <section class="photo-break ocean-photo">
+    <div class="photo-copy"><small>EL NIÑO, VISUALIZED</small><h2>뜨거워진 태평양을<br>눈앞에서 마주하다</h2><p>국립대구기상과학관의 ‘지구 ON’ 체험 코너에 엘니뇨 현상이 표현되고 있습니다.</p></div>
+    <div class="photo-credit">6일 국립대구기상과학관 ‘지구 ON’ 체험 코너 · 연합뉴스 / 아시아경제 기사 게재</div>
+  </section>
+
+  <section class="article-detail">
+    <div class="detail-inner">
+      <div class="detail-kicker">WHAT WE KNOW</div>
+      <h2>이번 엘니뇨가<br>‘역대 최강’으로 불리는 이유</h2>
+      <div class="detail-grid">
+        <article class="detail-card hot">
+          <b>WMO 전망</b>
+          <h3>내년 초까지 이어질 가능성</h3>
+          <p>WMO는 전망 기간 중 해수면 온도가 평년 수준으로 돌아가거나 라니냐로 전환할 가능성이 없다고 봤습니다.</p>
+          <div class="probability"><div><strong>100%</strong>9~11월 유지 확률</div><div><strong>100%</strong>12월~내년 2월 유지 확률</div></div>
+        </article>
+        <article class="detail-card">
+          <b>엘니뇨의 정의</b>
+          <h3>어디서, 얼마나 뜨거워져야 하나</h3>
+          <p>북위 5도~남위 5도, 서경 170도~120도 사이 열대 태평양 감시구역에서 3개월 이동평균 해수면 온도가 평년보다 0.5℃ 이상 높은 상태가 5개월 넘게 지속되는 현상입니다.</p>
+        </article>
+        <article class="detail-card">
+          <b>관측된 변화</b>
+          <h3>+1.5℃에서 +2.6℃까지</h3>
+          <p>WMO에 따르면 5~7월 평균은 평년보다 1.5℃ 높았고 7월에는 2.0℃까지 벌어졌습니다. 7월29일~8월19일에는 2.2~2.6℃, 기상청의 지난달 23~29일 관측도 2.6℃ 높았습니다.</p>
+        </article>
+        <article class="detail-card hot">
+          <b>과거와의 비교</b>
+          <h3>세 차례의 강력한 기록을 넘을까</h3>
+          <p>전문가들은 이번 현상이 과거 강력한 엘니뇨를 넘어 역대 가장 강한 수준으로 발달할 가능성도 있다고 보고 있습니다.</p>
+          <div class="history"><span>1997</span><span>2015</span><span>2023</span></div>
+        </article>
+        <article class="detail-card wide">
+          <b>전망 모델</b>
+          <h3>최고 +3.9℃…연말 매우 강한 수준으로 정점</h3>
+          <p>기후 전문매체가 14개 예측모델을 종합한 결과 11월 감시구역의 해수면 온도는 평년보다 3.9℃까지 높아질 것으로 예상됐습니다. 한국 기상청 모델 역시 가을철 3.0℃ 이상을 전망했습니다. 강도가 높을수록 세계 각지의 기온과 강수 양상이 크게 변할 여지도 커집니다.</p>
+        </article>
+        <article class="detail-card wide">
+          <b>한국과 세계</b>
+          <h3>따뜻하고 비 많은 겨울, 그리고 이미 시작된 경제적 피해</h3>
+          <p>한국은 겨울철 기온이 평년보다 높고 강수량이 많아지는 경향을 보입니다. 세계적으로는 강한 엘니뇨가 지구 온난화를 심화하고 기온과 강수 패턴을 흔들 수 있습니다. 파나마에서는 가뭄이 장기화하며 운하 운영에 차질이 생겼고 국가비상사태가 선포됐습니다.</p>
+        </article>
+      </div>
+      <div class="caution"><strong>다만, 한국의 겨울을 엘니뇨 하나만으로 단정할 수는 없습니다.</strong><br>인도양과 서태평양의 해수면 온도, 북극 해빙 등 다양한 변수가 국내 날씨에 함께 영향을 줍니다.</div>
+    </div>
+  </section>
+
+  <article class="full-article">
+    <div class="article-inner">
+      <header class="article-head">
+        <div class="tag">WMO 엘니뇨·라니냐 전망</div>
+        <h2>‘역대 최강’ 엘니뇨,<br>내년 초까지 이어진다</h2>
+        <p class="summary">온난화와 이상기후 우려가 커지는 가운데 우리나라의 올겨울 기온은 평년보다 높고 강수량은 많을 가능성이 제기됩니다.</p>
+      </header>
+      <div class="article-copy">
+        <p class="lead">엘니뇨가 올해 말 매우 강한 수준으로 정점에 이른 뒤 최소 내년 초까지 이어질 것으로 예상됩니다. 우리나라에도 영향을 미쳐 올겨울 기온이 평년보다 높고 강수량이 많을 가능성이 제기됩니다.</p>
+
+        <p>3일 세계기상기구(WMO)가 발표한 엘니뇨·라니냐 전망에 따르면 오는 <mark>9~11월 엘니뇨 상태가 유지될 확률은 100%</mark>로 제시됐습니다. 12월부터 내년 2월까지도 엘니뇨가 이어질 확률이 100%로 전망됐습니다.</p>
+
+        <p>WMO는 전망 기간 중 해수면 온도가 평년 수준으로 돌아가거나 라니냐로 전환할 가능성은 없다고 봤습니다.</p>
+
+        <p class="quote">“엘니뇨 강도가 더 강해지겠으며 매우 강한 수준으로 발달해 연말 정점에 이를 것으로 보인다. 매우 강한 엘니뇨는 세계 곳곳의 기온과 강수 양상에 두드러진 변동을 일으킬 여지를 키울 것이다.”</p>
+
+        <p>한국은 엘니뇨가 발생하면 최성기인 겨울철에 기온이 높고 강수량이 많아지는 경향을 보입니다. 다만 국내 겨울 날씨는 인도양과 서태평양의 해수면 온도, 북극 해빙 등 다양한 변수의 영향을 받기 때문에 <mark>엘니뇨만으로 기온과 강수량을 단정하기는 어렵습니다.</mark></p>
+
+        <p>엘니뇨는 열대 태평양의 특정 감시구역에서 해수면 온도가 3개월 이동평균으로 평년보다 0.5도 이상 높은 상태가 5개월 넘게 지속되는 현상입니다. 해당 구역은 북위 5도~남위 5도, 서경 170~120도 사이에 있습니다.</p>
+
+        <div class="inline-data"><small>엘니뇨 판단 기준</small><strong>+0.5℃</strong><p>3개월 이동평균 기준으로 5개월 이상 지속될 때 엘니뇨로 판단</p></div>
+
+        <p>이번 엘니뇨의 강도는 이미 이 기준을 크게 웃돌고 있습니다. WMO에 따르면 감시구역의 해수면 온도는 지난 5~7월 평년보다 1.5도 높았고, 7월에는 온도 차가 2.0도까지 벌어졌습니다. 지난 7월29일부터 8월19일 사이에는 평년보다 2.2~2.6도 높은 수준을 기록했습니다.</p>
+
+        <p>기상청 역시 지난달 23~29일 감시구역의 해수면 온도가 평년보다 2.6도 높았다고 밝혔습니다. 통상 평년보다 2.0도 이상 높을 경우 공식 용어는 아니지만 <mark>‘슈퍼 엘니뇨’</mark>로 불립니다.</p>
+
+        <div class="inline-data"><small>최근 관측된 수온 편차</small><strong>+2.6℃</strong><p>기상청이 발표한 엘니뇨 감시구역의 평년 대비 해수면 온도</p></div>
+
+        <p>전문가들은 이번 엘니뇨가 1997년과 2015년, 2023년에 시작된 강력한 엘니뇨를 넘어 역대 가장 강한 수준으로 발달할 가능성도 있다고 보고 있습니다.</p>
+
+        <p>기후 전문매체 ‘더 클라이밋 브링크’가 14개 기후예측모델을 종합한 결과, 오는 11월 감시구역의 해수면 온도는 평년보다 3.9도까지 높아질 것으로 예상됐습니다. 한국 기상청 엘니뇨·라니냐 예측 모델도 가을철 감시구역 해수면 온도가 평년보다 3.0도 이상 높을 것으로 전망했습니다.</p>
+
+        <div class="inline-data"><small>14개 기후예측모델 종합</small><strong>+3.9℃</strong><p>오는 11월 엘니뇨 감시구역 해수면 온도 전망치</p></div>
+
+        <p>강력한 엘니뇨는 지구 온난화를 더욱 심화하고 세계 각지의 기온과 강수 패턴을 크게 흔들 수 있습니다. WMO는 앞서 올해부터 2030년까지 5년 사이 기존의 역대 최고기온 기록이 깨질 가능성을 86%로 전망하면서 내년을 가장 유력한 시점으로 지목했습니다.</p>
+
+        <p>경제적 피해도 이미 나타나고 있습니다. 파나마에서는 엘니뇨의 영향으로 가뭄이 장기화하면서 파나마운하 운영에 차질이 빚어졌고, 정부가 국가비상사태를 선포하는 상황까지 벌어졌습니다.</p>
+      </div>
+      <div class="article-credit">윤슬기 기자 · 기사 제공 내용 기반 비주얼 구성</div>
+    </div>
+  </article>
+
+  <footer class="ending">
+    <div><blockquote>올겨울은 <span>따뜻할 수 있다.</span><br>하지만 안정적이라는 뜻은 아니다.</blockquote><p>강한 엘니뇨는 세계 곳곳의 기온과 강수 패턴을 크게 흔들 수 있습니다.</p><p class="source">자료: 기사 제공 내용 · 세계기상기구(WMO) 전망 인용<br>사진: 윤동주 기자 / 아시아경제 · 연합뉴스 / 아시아경제 기사 게재<br>지도: OpenFreeMap · © OpenMapTiles · Data from OpenStreetMap · MapLibre GL JS</p></div>
+  </footer>
+</main>
+<script>
+const steps=[...document.querySelectorAll('.step')];
+const tempValues=['+1.5℃','+2.0℃','+2.6℃','+3.9℃'];
+const colors=['#f1b84b','#f07a3d','#e43f35','#93162e'];
+const titles={
+ world:['GLOBAL CLIMATE','역대급 엘니뇨가 온다'],
+ normal:['NORMAL PACIFIC','평상시의 적도 태평양'],
+ 'elnino-mechanism':['EL NIÑO','따뜻한 바다가 동쪽으로'],
+ lanina:['LA NIÑA','더 강한 무역풍과 용승'],
+ probability:['WMO OUTLOOK','두 전망 구간 모두 100%'],
+ monitor:['NIÑO 3.4 REGION','열대 태평양 감시구역'],
+ heat:['SEA SURFACE TEMPERATURE','빠르게 뜨거워지는 바다'],
+ forecast:['MODEL FORECAST','연말 더 강한 정점'],
+ korea:['SOUTH KOREA','따뜻하고 습한 겨울 가능성'],
+ variables:['MULTIPLE DRIVERS','한국 겨울을 결정하는 변수'],
+ history:['PAST & PRESENT','과거 강한 기록과 비교'],
+ panama:['GLOBAL IMPACT','파나마운하에 닥친 가뭄']
+};
+let map,ready=false;
+const monitorArea={type:'Feature',properties:{},geometry:{type:'Polygon',coordinates:[[[-170,-5],[-120,-5],[-120,5],[-170,5],[-170,-5]]]}};
+const impactPoints={type:'FeatureCollection',features:[
+ {type:'Feature',properties:{name:'대한민국'},geometry:{type:'Point',coordinates:[127.7,36.2]}},
+ {type:'Feature',properties:{name:'파나마운하'},geometry:{type:'Point',coordinates:[-79.7,9.1]}}
+]};
+const route={type:'Feature',properties:{},geometry:{type:'LineString',coordinates:[[-145,0],[-170,14],[170,26],[145,33],[127.7,36.2]]}};
+const heatPoints={type:'FeatureCollection',features:[]};
+for(let x=-169;x<=-121;x+=4){for(let y=-4;y<=4;y+=2){heatPoints.features.push({type:'Feature',properties:{weight:1-Math.abs(y)/10},geometry:{type:'Point',coordinates:[x,y]}})}}
+function initMap(){
+ if(!window.maplibregl)return;
+ map=new maplibregl.Map({container:'map',style:'https://tiles.openfreemap.org/styles/liberty',center:[150,12],zoom:innerWidth>760?1.9:1.5,pitch:20,bearing:-12,attributionControl:false,interactive:false});
+ map.on('load',()=>{
+  ready=true;document.body.classList.add('map-loaded');
+ try{map.setProjection({type:'globe'})}catch(e){}
+  const eastSeaNames=['Sea of Japan','Japan Sea','日本海','일본해'];
+  ['water_name_point_label','water_name_line_label'].forEach(id=>{
+   if(!map.getLayer(id))return;
+   const original=map.getLayoutProperty(id,'text-field');
+   map.setLayoutProperty(id,'text-field',['match',['coalesce',['get','name_en'],['get','name:latin'],['get','name'],['get','name:nonlatin']],eastSeaNames,'동해(East Sea)',original]);
+  });
+  map.addSource('monitor',{type:'geojson',data:monitorArea});
+  map.addSource('temperature',{type:'geojson',data:heatPoints});
+  map.addLayer({id:'temperature-heat',type:'heatmap',source:'temperature',maxzoom:8,paint:{
+   'heatmap-weight':['get','weight'],'heatmap-intensity':1.35,'heatmap-radius':34,'heatmap-opacity':.72,
+   'heatmap-color':['interpolate',['linear'],['heatmap-density'],0,'rgba(0,0,0,0)',.18,'#ffd65b',.42,'#ff8b38',.68,'#f04432',1,'#7d0928']
+  }});
+  map.addLayer({id:'monitor-glow',type:'line',source:'monitor',paint:{'line-color':'#ffb052','line-width':10,'line-opacity':.23,'line-blur':8}});
+  map.addLayer({id:'monitor-fill',type:'fill',source:'monitor',paint:{'fill-color':'#ffb052','fill-opacity':.3}});
+  map.addLayer({id:'monitor-line',type:'line',source:'monitor',paint:{'line-color':'#ffe0a2','line-width':2,'line-dasharray':[2,1.5]}});
+  map.addSource('impact',{type:'geojson',data:impactPoints});
+  map.addLayer({id:'impact-glow',type:'circle',source:'impact',paint:{'circle-radius':22,'circle-color':'#ff503c','circle-opacity':.22,'circle-blur':.25}});
+  map.addLayer({id:'impact-dot',type:'circle',source:'impact',paint:{'circle-radius':7,'circle-color':'#fff','circle-stroke-color':'#ff503c','circle-stroke-width':4}});
+  map.addLayer({id:'impact-label',type:'symbol',source:'impact',layout:{'text-field':['get','name'],'text-size':15,'text-offset':[0,1.5],'text-font':['Noto Sans Regular']},paint:{'text-color':'#fff','text-halo-color':'#07111a','text-halo-width':2}});
+  map.addSource('route',{type:'geojson',data:route});
+  map.addLayer({id:'route-line',type:'line',source:'route',paint:{'line-color':'#ff7a62','line-width':4,'line-opacity':.85,'line-dasharray':[2,2]}});
+  setLayer('monitor',false);setLayer('impact',false);setLayer('route',false);
+  animateHeat();
+  activate(document.querySelector('.step'));
+ });
+}
+function setLayer(group,show){
+ if(!ready)return;
+ const ids=group==='monitor'?['temperature-heat','monitor-glow','monitor-fill','monitor-line']:group==='impact'?['impact-glow','impact-dot','impact-label']:['route-line'];
+ ids.forEach(id=>map.setLayoutProperty(id,'visibility',show?'visible':'none'));
+}
+function animateHeat(){
+ if(!ready)return;
+ const pulse=(Math.sin(performance.now()/650)+1)/2;
+ map.setPaintProperty('temperature-heat','heatmap-radius',30+pulse*16);
+ map.setPaintProperty('monitor-glow','line-opacity',.16+pulse*.22);
+ requestAnimationFrame(animateHeat);
+}
+function fly(center,zoom,pitch=38,bearing=0){
+ if(ready)map.flyTo({center,zoom,pitch,bearing,duration:2100,essential:true});
+}
+function applyHeatLevel(level){
+ level=Math.max(0,Math.min(3,Number(level)));
+ document.querySelector('#temp').textContent=tempValues[level];
+ document.querySelectorAll('.period i').forEach((el,i)=>el.classList.toggle('on',i===level));
+ document.querySelector('#timeSlider').value=level;
+ document.querySelector('#timeOutput').textContent=['5~7월 관측','7월 관측','최근 관측','11월 모델 전망'][level];
+ if(ready){
+  map.setPaintProperty('monitor-fill','fill-color',colors[level]);
+  map.setPaintProperty('monitor-fill','fill-opacity',.28+level*.12);
+  map.setPaintProperty('monitor-line','line-color',colors[level]);
+  map.setPaintProperty('temperature-heat','heatmap-intensity',1.15+level*.5);
+  map.setPaintProperty('temperature-heat','heatmap-opacity',.56+level*.1);
+ }
+}
+function activate(step){
+ const scene=step.dataset.scene||'world',level=Number(step.dataset.level||0),title=titles[scene];
+ document.querySelector('#mapKicker').textContent=title[0];document.querySelector('#mapTitle').textContent=title[1];
+ document.querySelector('.chapter-label').classList.toggle('hide',scene==='korea');
+ document.querySelector('.chapter-label').classList.toggle('variables-title',scene==='variables');
+ document.querySelector('.chapter-label').classList.toggle('photo-mode',['korea','panama'].includes(scene));
+ document.querySelector('#tempHud').classList.toggle('show',['heat','forecast'].includes(scene));
+ document.querySelector('#legend').classList.toggle('show',['monitor','heat','forecast'].includes(scene));
+ document.querySelector('#locationTag').classList.remove('show');
+ document.querySelector('#locationTag').classList.toggle('panama-mode',scene==='panama');
+ document.querySelector('#koreaPanel').classList.toggle('show',scene==='korea');
+ document.querySelector('#koreaPhoto').classList.toggle('show',scene==='korea');
+ document.querySelector('#panamaPhoto').classList.toggle('show',scene==='panama');
+ document.querySelector('#variables').classList.toggle('show',scene==='variables');
+ document.querySelector('#historyChart').classList.toggle('show',scene==='history');
+ const ensoPanel=document.querySelector('#ensoMechanism'),ensoScenes=['normal','elnino-mechanism','lanina'];
+ ensoPanel.className='enso-mechanism'+(ensoScenes.includes(scene)?' show ':' ')+(scene==='elnino-mechanism'?'elnino-state':scene==='lanina'?'lanina-state':'normal-state');
+ if(scene==='normal'){document.querySelector('#ensoName').textContent='평상시의 적도 태평양';document.querySelector('#upwellingText').textContent='찬 바닷물 용승';document.querySelector('#ensoFacts').innerHTML='<span>강한 무역풍</span><span>따뜻한 물은 서쪽</span><span>동쪽 용승 활발</span>'}
+ if(scene==='elnino-mechanism'){document.querySelector('#ensoName').textContent='엘니뇨';document.querySelector('#upwellingText').textContent='용승 약화';document.querySelector('#ensoFacts').innerHTML='<span>무역풍 약화</span><span>따뜻한 물은 동쪽으로</span><span>비구름도 동쪽 이동</span>'}
+ if(scene==='lanina'){document.querySelector('#ensoName').textContent='라니냐';document.querySelector('#upwellingText').textContent='용승 강화';document.querySelector('#ensoFacts').innerHTML='<span>무역풍 강화</span><span>따뜻한 물은 더 서쪽</span><span>동태평양 냉각</span>'}
+ setLayer('monitor',['monitor','heat','forecast'].includes(scene));setLayer('impact',['korea','panama'].includes(scene));setLayer('route',false);
+ if(['heat','forecast'].includes(scene)){
+  applyHeatLevel(level);
+ }
+ if(scene==='world')fly([150,12],innerWidth>760?1.9:1.5,20,-12);
+ if(ensoScenes.includes(scene))fly([-155,0],1.85,25,0);
+ if(scene==='probability')fly([-150,5],2.2,38,8);
+ if(['monitor','heat','forecast'].includes(scene))fly([-145,0],3.25,48,-8);
+ if(scene==='korea'){fly([128,35.8],4.5,54,-18)}
+ if(scene==='variables')fly([80,45],2.1,30,-8);
+ if(scene==='history')fly([-145,0],2.55,30,0);
+ if(scene==='panama'){fly([-79.7,9.1],5.2,55,20);document.querySelector('#locationTag').textContent='파나마운하 · 가뭄 장기화와 운영 차질';document.querySelector('#locationTag').classList.add('show')}
+}
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{if(entry.isIntersecting)activate(entry.target)});
+},{rootMargin:'-35% 0px -35% 0px',threshold:0});
+steps.forEach(step=>observer.observe(step));
+document.querySelector('#timeSlider').addEventListener('input',e=>applyHeatLevel(e.target.value));
+function toggleTerm(term){
+ const willOpen=!term.classList.contains('open');
+ document.querySelectorAll('.term.open').forEach(el=>{el.classList.remove('open');el.setAttribute('aria-expanded','false')});
+ if(willOpen){term.classList.add('open');term.setAttribute('aria-expanded','true')}
+}
+document.querySelectorAll('.term').forEach(term=>{
+ term.addEventListener('click',e=>{e.stopPropagation();toggleTerm(term)});
+ term.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleTerm(term)}});
+});
+document.addEventListener('click',()=>document.querySelectorAll('.term.open').forEach(el=>{el.classList.remove('open');el.setAttribute('aria-expanded','false')}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.term.open').forEach(el=>{el.classList.remove('open');el.setAttribute('aria-expanded','false')})});
+initMap();
+</script>
+</body>
+</html>
